@@ -1,7 +1,5 @@
 from model.categoria import Categoria
 from model.dao.base_dao import BaseDAO
-
-
 class Categoria_DAO(BaseDAO): 
     def save(self, categoria:Categoria):
         sql = """insert into categoria (nome)
