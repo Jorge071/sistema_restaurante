@@ -1,7 +1,7 @@
 from model.mesas import Mesas
-from model.dao.base_dao import Base_DAO
+from model.dao.base_dao import BaseDAO
 
-class Mesas_DAO(Base_DAO):
+class Mesas_DAO(BaseDAO):
     def save(self, mesas:Mesas):
         sql = "insert into mesas (id, numero, capacidade, status) values (%s, %s, %s, %s)"
         
