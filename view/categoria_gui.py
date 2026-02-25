@@ -1,7 +1,7 @@
 import tkinter as tk 
 from tkinter import messagebox, ttk
 
-class Categoria_view:
+class Categoria_View:
     def __init__(self, master=None):
         self.controller = None
         if master:
