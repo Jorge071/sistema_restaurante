@@ -1,70 +1,79 @@
-from model.produto_categoria import Produto_categoria
+from model.comanda_produto import Comanda_Produto
 
-class Produto_categoria_Controller:
-    def __init__(self, dao_prod_cat, dao_prod, dao_cat, view):
-        self.dao_prod_cat = dao_prod_cat
+
+class Comanda_Produto_Controller:
+
+    def __init__(self, dao_com_prod, dao_prod, dao_com, view):
+        self.dao_com_prod = dao_com_prod
         self.dao_prod = dao_prod
-        self.dao_cat = dao_cat
+        self.dao_com = dao_com
         self.view = view
         self.view.controller = self
 
-    def add_produto_categoria(self):
+    # 🔹 Adicionar
+    def add_comanda_produto(self):
         try:
-            dados = self.view.get_dados_produto_categoria()
+            dados = self.view.get_dados_comanda_produto()
 
-            nova_relacao = Produto_categoria(
-                id=None,
-                id_produto=dados['id_produto'],
-                id_categoria=dados['id_categoria']
+            nova_relacao = Comanda_Produto(
+                dados['comanda_id'],
+                dados['produto_id']
             )
 
-            self.dao_prod_cat.save(nova_relacao)
+            self.dao_com_prod.save(nova_relacao)
             self.view.show_message("Vínculo criado com sucesso!")
 
         except Exception as e:
             self.view.show_error(f"Erro ao adicionar: {str(e)}")
 
-    def update_produto_categoria(self):
+    # 🔹 Atualizar (trocar produto)
+    def update_comanda_produto(self):
         try:
-            id_rel = self.view.get_id()
-            dados = self.view.get_dados_produto_categoria()
+            dados = self.view.get_dados_comanda_produto()
 
-            rel_atu = Produto_categoria(
-                id_rel,
-                dados['id_produto'],
-                dados['id_categoria']
-            )
-
-            if self.dao_prod_cat.update(rel_atu):
+            if self.dao_com_prod.update(
+                dados['comanda_id'],
+                dados['produto_id_antigo'],
+                dados['produto_id_novo']
+            ):
                 self.view.show_message("Vínculo atualizado com sucesso!")
             else:
-                self.view.show_error("Erro ao atualizar!")
+                self.view.show_error("Vínculo não encontrado!")
 
         except Exception as e:
-            self.view.show_error(f"Erro: {str(e)}")
+            self.view.show_error(f"Erro ao atualizar: {str(e)}")
 
-    def delete_produto_categoria(self):
+    # 🔹 Deletar
+    def delete_comanda_produto(self):
         try:
-            id_rel = self.view.get_id()
+            dados = self.view.get_dados_comanda_produto()
 
-            if self.dao_prod_cat.delete(id_rel):
-                self.view.show_message("Vínculo excluído!")
+            if self.dao_com_prod.delete(
+                dados['comanda_id'],
+                dados['produto_id']
+            ):
+                self.view.show_message("Vínculo excluído com sucesso!")
             else:
-                self.view.show_error("Não encontrado!")
+                self.view.show_error("Vínculo não encontrado!")
 
         except Exception as e:
-            self.view.show_error(f"Erro: {str(e)}")
+            self.view.show_error(f"Erro ao excluir: {str(e)}")
 
-    def list_produto_categoria(self):
+    # 🔹 Listar
+    def list_comanda_produto(self):
         try:
-            lista = self.dao_prod_cat.get_all()
-            self.view.show_produto_categoria(lista)
+            lista = self.dao_com_prod.get_all()
+            self.view.show_comanda_produto(lista)
 
         except Exception as e:
             self.view.show_error(f"Erro ao listar: {str(e)}")
 
+    # 🔹 Carregar combos aaaaaaaaaaaaaaaaaaaaaaaaaaa
     def list_related_dados(self):
-        # Preenche os combos igual tu faz na movimentação
-        self.view.preencher_combo_produtos(self.dao_prod.get_all())
-        self.view.preencher_combo_categorias(self.dao_cat.get_all())
-        self.view.run()
+        try:
+            self.view.preencher_combo_produtos(self.dao_prod.get_all())
+            self.view.preencher_combo_comandas(self.dao_com.get_all())
+            self.view.run()
+
+        except Exception as e:
+            self.view.show_error(f"Algum erro ao carregar os dados: {str(e)}")
