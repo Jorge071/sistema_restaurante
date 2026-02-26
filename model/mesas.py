@@ -1,4 +1,6 @@
 class Mesas:
-    def __init__(self, id=None, nome=None):
+    def __init__(self, id,numero, capacidade):
         self._id = id
-        self._nome = nome
+        self._numero = numero
+        self._capacidade = capacidade
+        
