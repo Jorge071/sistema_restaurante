@@ -65,3 +65,4 @@ class Categoria_DAO(BaseDAO):
         cursor.close()
         conn.close()
         return affected_rows > 0
+    
