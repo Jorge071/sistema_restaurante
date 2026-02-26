@@ -19,6 +19,7 @@ class Main_Gui:
         menu_cadastros = tk.Menu(barra_menu, tearoff=0)
         menu_cadastros.add_command(label="Mesas", command=self._abrir_mesas)
         menu_cadastros.add_command(label="Categoria", command=self._abrir_categoria)
+        menu_cadastros.add_command(label="Produtos", command=self._abrir_produtos)
         menu_cadastros.add_separator()
         menu_cadastros.add_command(label="Sair", command=self.root.quit)
         
@@ -32,6 +33,12 @@ class Main_Gui:
     def _abrir_categoria(self):
         if self.controller:
             self.controller.exibir_categoria()
+            
+    def _abrir_produtos(self):
+            if self.controller:
+                self.controller.exibir_produtos()
 
     def run(self):
         self.root.mainloop()
+    
+    
