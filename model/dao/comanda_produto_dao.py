@@ -1,36 +1,40 @@
-from model.produto_categoria import Produto_categoria
+from model.comanda_produto import Comanda_Produto
 from model.dao.base_dao import BaseDAO
 
-class Produto_categoria_DAO(BaseDAO):
-    def __init__(self, db_config):
-        super().__init__(db_config)
 
-    def save(self, prod_cat: Produto_categoria):
-        sql = """insert into produto_categoria (id_produto, id_categoria)
-                 values (%s, %s)"""
+class Comanda_Produto_DAO(BaseDAO):
+
+
+    def save(self, com_prod: Comanda_Produto):
+        sql = """
+            INSERT INTO comanda_produto (comanda_id, produto_id)
+            VALUES (%s, %s)
+            """
 
         conn = self._get_connection()
         cursor = conn.cursor()
 
         try:
-            cursor.execute(sql, (prod_cat._id_produto, prod_cat._id_categoria))
-            prod_cat._id = cursor.lastrowid
-            conn.commit()
-            return prod_cat
+                cursor.execute(sql, (
+                    com_prod.comanda_id,
+                    com_prod.produto_id
+                ))
+                conn.commit()
+                return com_prod
+
         except Exception as e:
-            conn.rollback()
-            raise e
+                conn.rollback()
+                raise e
+
         finally:
-            cursor.close()
-            conn.close()
+                cursor.close()
+                conn.close()
+
 
     def get_all(self):
         sql = """
-        select pc.id, pc.id_produto, pc.id_categoria,
-               p.nome, c.nome
-        from produto_categoria pc
-        inner join produto p on pc.id_produto = p.id
-        inner join categoria c on pc.id_categoria = c.id
+        SELECT comanda_id, produto_id
+        FROM comanda_produto
         """
 
         conn = self._get_connection()
@@ -38,65 +42,57 @@ class Produto_categoria_DAO(BaseDAO):
         cursor.execute(sql)
 
         lista = []
-        for (id, id_prod, id_cat, nome_prod, nome_cat) in cursor:
+
+        for (comanda_id, produto_id) in cursor:
             lista.append(
-                Produto_categoria(id, id_prod, id_cat, nome_prod, nome_cat)
+                Comanda_Produto(comanda_id, produto_id)
             )
 
         cursor.close()
         conn.close()
+
         return lista
 
-    def get_by_id(self, id):
-        sql = """select id, id_produto, id_categoria
-                 from produto_categoria
-                 where id = %s"""
+ 
+    def delete(self, comanda_id, produto_id):
+        sql = """
+        DELETE FROM comanda_produto
+        WHERE comanda_id = %s AND produto_id = %s
+        """
 
         conn = self._get_connection()
         cursor = conn.cursor()
-        cursor.execute(sql, (id,))
-        row = cursor.fetchone()
-
-        prod_cat = None
-        if row:
-            id, id_prod, id_cat = row
-            prod_cat = Produto_categoria(id, id_prod, id_cat)
-
-        cursor.close()
-        conn.close()
-        return prod_cat
-
-    def delete(self, id):
-        sql = "delete from produto_categoria where id = %s"
-
-        conn = self._get_connection()
-        cursor = conn.cursor()
-        cursor.execute(sql, (id,))
+        cursor.execute(sql, (comanda_id, produto_id))
         conn.commit()
 
         affected_rows = cursor.rowcount
 
         cursor.close()
         conn.close()
+
         return affected_rows > 0
 
-    def update(self, prod_cat: Produto_categoria):
-        sql = """update produto_categoria
-                 set id_produto = %s,
-                     id_categoria = %s
-                 where id = %s"""
 
-        values = (prod_cat._id_produto,
-                  prod_cat._id_categoria,
-                  prod_cat._id)
+    def update(self, comanda_id, produto_id_antigo, produto_id_novo):
+        sql = """
+        UPDATE comanda_produto
+        SET produto_id = %s
+        WHERE comanda_id = %s AND produto_id = %s
+        """
 
         conn = self._get_connection()
         cursor = conn.cursor()
-        cursor.execute(sql, values)
-        conn.commit()
 
+        cursor.execute(sql, (
+            produto_id_novo,
+            comanda_id,
+            produto_id_antigo
+        ))
+
+        conn.commit()
         affected_rows = cursor.rowcount
 
         cursor.close()
         conn.close()
+
         return affected_rows > 0

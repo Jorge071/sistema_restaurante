@@ -16,16 +16,24 @@ class Produto_DAO(BaseDAO):
         return produto
     
     def get_all(self):
-        sql = "select id, categoria_id, nome, valor from produto"    
+        # Adicionamos um JOIN para buscar o nome da categoria na outra tabela
+        sql = """
+            SELECT p.id, p.categoria_id, p.nome, p.valor, c.nome 
+            FROM produto p
+            INNER JOIN categoria c ON p.categoria_id = c.id
+        """    
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql)
-        produto = []
-        for (id, categoria_id, nome, valor) in cursor:
-            produto.append(Produto(id, categoria_id, nome, valor))
+        produtos = []
+        for (id, categoria_id, nome, valor, nome_categoria) in cursor:
+            p = Produto(id, categoria_id, nome, valor)
+            # Criamos um atributo dinâmico para o nome da categoria
+            p._nome_categoria = nome_categoria 
+            produtos.append(p)
         cursor.close()
         conn.close()
-        return produto
+        return produtos
     
     def get_by_id(self, id):
         sql = "select id, categoria_id, nome, valor from produto where id = %s"
