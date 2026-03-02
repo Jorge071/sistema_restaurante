@@ -35,10 +35,13 @@ class Main_Gui:
             self.controller.exibir_categoria()
             
     def _abrir_produtos(self):
-            if self.controller:
-                self.controller.exibir_produtos()
+        if self.controller:
+            self.controller.exibir_produtos()
 
     def run(self):
-        self.root.mainloop()
-    
-    
+        if self.controller:
+            self.controller.list_produto()
+
+        if not isinstance(self.root, tk.Toplevel):
+            self.root.mainloop()
+ 
