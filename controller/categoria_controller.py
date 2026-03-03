@@ -10,26 +10,59 @@ class Categoria_Controller:
     def add_categoria(self):
         try:
             dados = self.view.get_dados_categoria()
+            
+            # Validation - ensure dados is a dict and has 'nome' key
+            if dados is None:
+                self.view.show_error("Erro: dados vazios")
+                return
+            
+            if not isinstance(dados, dict):
+                self.view.show_error(f"Erro: tipo inválido {type(dados)}")
+                return
+            
+            if 'nome' not in dados:
+                self.view.show_error("Erro: nome não encontrado nos dados")
+                return
+            
+            nome = dados['nome']
+            if isinstance(nome, str):
+                nome = nome.strip()
+            
+            if not nome:
+                self.view.show_error("Erro: nome vazio! Digite um nome para a categoria")
+                return
+            
             novo = Categoria(
-                id=None,
-                nome=dados['nome']
+                nome=nome,
+                id=None
             )
             categoria_salvo = self.dao.save(novo)
             self.view.show_message(f"categoria adicionado com ID: {categoria_salvo._id}")
         except Exception as e:
+            import traceback
+            traceback.print_exc()
             self.view.show_error(f"Erro ao adicionar: {str(e)}")
 
     def update_categoria(self):
         try:
             id_categoria = self.view.get_id()
+            if not id_categoria:
+                self.view.show_error("Selecione uma categoria para atualizar")
+                return
+            
             categoria_existente = self.dao.get_by_id(id_categoria)
             if not categoria_existente:
                 self.view.show_error("não encontrado!")
                 return
+            
             dados = self.view.get_dados_categoria(categoria_existente)
+            if dados is None or 'nome' not in dados:
+                self.view.show_error("Dados inválidos")
+                return
+            
             categoria_atualizado = Categoria(
-                id=id_categoria,
-                nome=dados['nome'],
+                nome=dados['nome'].strip(),
+                id=id_categoria
             )
             if self.dao.update(categoria_atualizado):
                 self.view.show_message("atualizado com sucesso!")
@@ -41,17 +74,21 @@ class Categoria_Controller:
     def delete_categoria(self):
         try:
             id_categoria = self.view.get_id()
+            if not id_categoria:
+                self.view.show_error("Selecione uma categoria para deletar")
+                return
+            
             if self.dao.delete(id_categoria):
-                self.view.show_message(" deletado com sucesso!")
+                self.view.show_message("deletado com sucesso!")
             else:
-                self.view.show_error(" não encontrado!")
+                self.view.show_error("não encontrado!")
         except Exception as e:
             self.view.show_error(f"Erro ao deletar: {str(e)}")
 
     def list_categoria(self):
         try:
             categoria = self.dao.get_all()
-            self.view.show_clientes(categoria)
+            self.view.show_categoria(categoria)
         except Exception as e:
             self.view.show_error(f"Erro ao listar: {str(e)}")
 

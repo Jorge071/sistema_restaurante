@@ -14,6 +14,7 @@ class Produto_View:
         self.root.title("Gestão de Produtos")
         self.root.geometry("800x600")
 
+        # Variáveis
         self.var_id = tk.StringVar(self.root)
         self.var_nome = tk.StringVar(self.root)
         self.var_categoria_str = tk.StringVar(self.root)

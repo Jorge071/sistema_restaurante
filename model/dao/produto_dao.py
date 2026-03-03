@@ -49,6 +49,7 @@ class Produto_DAO(BaseDAO):
 
             p = Produto(id, categoria_id, nome, valor)
 
+            # ⭐ Melhor prática (sem underline)
             p.nome_categoria = nome_categoria
 
             produtos.append(p)

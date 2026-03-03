@@ -10,7 +10,7 @@ class Comanda_Produto_Controller:
         self.view = view
         self.view.controller = self
 
-
+    # 🔹 Adicionar
     def add_comanda_produto(self):
         try:
             dados = self.view.get_dados_comanda_produto()
@@ -26,7 +26,7 @@ class Comanda_Produto_Controller:
         except Exception as e:
             self.view.show_error(f"Erro ao adicionar: {str(e)}")
 
-
+    # 🔹 Atualizar (trocar produto)
     def update_comanda_produto(self):
         try:
             dados = self.view.get_dados_comanda_produto()
@@ -43,7 +43,7 @@ class Comanda_Produto_Controller:
         except Exception as e:
             self.view.show_error(f"Erro ao atualizar: {str(e)}")
 
-
+    # 🔹 Deletar
     def delete_comanda_produto(self):
         try:
             dados = self.view.get_dados_comanda_produto()
@@ -59,7 +59,7 @@ class Comanda_Produto_Controller:
         except Exception as e:
             self.view.show_error(f"Erro ao excluir: {str(e)}")
 
-
+    # 🔹 Listar
     def list_comanda_produto(self):
         try:
             lista = self.dao_com_prod.get_all()
@@ -68,6 +68,7 @@ class Comanda_Produto_Controller:
         except Exception as e:
             self.view.show_error(f"Erro ao listar: {str(e)}")
 
+    # 🔹 Carregar combos aaaaaaaaaaaaaaaaaaaaaaaaaaa
     def list_related_dados(self):
         try:
             self.view.preencher_combo_produtos(self.dao_prod.get_all())

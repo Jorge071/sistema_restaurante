@@ -41,7 +41,7 @@ class Mesas_DAO(BaseDAO):
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
         
-        mesas = None
+        mesas = None # Variável local
         if row:
            id, numero, capacidade, status = row
            mesas = Mesas(id, numero, capacidade, status)
