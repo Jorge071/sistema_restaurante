@@ -5,7 +5,12 @@ class Mesas_DAO(BaseDAO):
     def save(self, mesas:Mesas):
         sql = "insert into mesas (id, numero, capacidade, status) values (%s, %s, %s, %s)"
         
-        values = (mesas._id, )
+        values = (
+    mesas._id,
+    mesas._numero,
+    mesas._capacidade,
+    mesas._status
+    )
 
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -21,12 +26,13 @@ class Mesas_DAO(BaseDAO):
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql)
-        Mesas = []
+  
+        lista = []
         for (id, numero, capacidade, status) in cursor:
-            Mesas.append(Mesas(id, numero, capacidade, status))
+            lista.append(Mesas(id, numero, capacidade, status))
         cursor.close()
         conn.close()
-        return Mesas
+        return lista
     
     def get_by_id(self, id):
         sql = "select id, numero, capacidade, status from mesas where id = %s"
@@ -35,7 +41,7 @@ class Mesas_DAO(BaseDAO):
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
         
-        mesas = None # Variável local
+        mesas = None
         if row:
            id, numero, capacidade, status = row
            mesas = Mesas(id, numero, capacidade, status)
@@ -67,4 +73,3 @@ class Mesas_DAO(BaseDAO):
         cursor.close()
         conn.close()
         return affected_rows > 0
-    

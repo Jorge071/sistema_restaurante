@@ -4,7 +4,7 @@ class Categoria_DAO(BaseDAO):
     def save(self, categoria:Categoria):
         sql = "insert into categoria (nome) values (%s)"
         
-        values = (categoria._nome)
+        values = (categoria._nome,)
 
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -22,7 +22,7 @@ class Categoria_DAO(BaseDAO):
         cursor.execute(sql)
         categoria = []
         for (id, nome) in cursor:
-            categoria.append(Categoria(id, nome))
+            categoria.append(Categoria(nome, id))
         cursor.close()
         conn.close()
         return categoria
@@ -34,10 +34,10 @@ class Categoria_DAO(BaseDAO):
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
         
-        categoria = None # Variável local
+        categoria = None
         if row:
            id, nome = row
-           categoria = Categoria(id, nome)
+           categoria = Categoria(nome, id)
         
         cursor.close()
         conn.close()    
@@ -65,4 +65,3 @@ class Categoria_DAO(BaseDAO):
         cursor.close()
         conn.close()
         return affected_rows > 0
-    

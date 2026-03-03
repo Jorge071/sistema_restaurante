@@ -8,6 +8,10 @@ class Produto_Controller:
         self.view = view
         self.view.controller = self
 
+    def carregar_categorias_combo(self):
+        categorias = self.dao_categoria.get_all()
+        self.view.preencher_combo_categorias(categorias)
+
     def add_produto(self):
         try:
             dados = self.view.get_dados_produto()

@@ -1,6 +1,5 @@
 class Comanda:
-    def __init__(self, categoria_id,id,nome,valor):
+    def __init__(self, mesa_id,id,valor):
         self._id = id
-        self._categoria_id = categoria_id
-        self._nome = nome
+        self._mesa_id = mesa_id
         self._valor = valor
