@@ -34,10 +34,10 @@ class Main_Controller:
         view.controller = ctrl
         view.run()
 
-    def exibir_produto_categoria(self):
+    def exibir_comanda_produto(self):
         dao_rel = Comanda_Produto_DAO(self.db_config)
         dao_prod = Produto_DAO(self.db_config)
-        dao_cat = Categoria_DAO(self.db_config)
+        dao_cat = Mesas_DAO(self.db_config)
 
         view = Comanda_produto_View()
         ctrl = Comanda_Produto_Controller(dao_rel, dao_prod, dao_cat, view)
@@ -50,11 +50,11 @@ class Main_Controller:
         view = Produto_View() 
         ctrl = Produto_Controller(dao, view)
         
-        # BUSCAR CATEGORIAS PARA O COMBOBOX
+
         dao_cat = Categoria_DAO(self.db_config)
         categorias = dao_cat.get_all()
-        view.preencher_combo_categorias(categorias) # Envia para a View
+        view.preencher_combo_categorias(categorias) 
         
-        ctrl.list_produto() # Carrega a tabela
+        ctrl.list_produto() 
         view.controller = ctrl
         view.run()

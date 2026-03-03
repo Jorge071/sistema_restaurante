@@ -54,7 +54,6 @@ class Categoria_View:
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
 
     def run(self):
-        # Populate list immediately when opening
         if self.controller:
             self.controller.list_categoria()
         
@@ -71,7 +70,6 @@ class Categoria_View:
 
     def _acao_listar(self):
         if self.controller:
-            # controller may call either show_categoria or show_clientes; keep both names supported
             try:
                 self.controller.list_categoria()
             except Exception:
@@ -83,7 +81,7 @@ class Categoria_View:
         for p in lista:
             self.tree.insert("", "end", values=(p._id, p._nome))
 
-    # backward-compatible alias used by some controllers
+
     def show_clientes(self, lista):
         self.show_categoria(lista)
 

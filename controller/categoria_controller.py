@@ -10,8 +10,6 @@ class Categoria_Controller:
     def add_categoria(self):
         try:
             dados = self.view.get_dados_categoria()
-            
-            # Validation - ensure dados is a dict and has 'nome' key
             if dados is None:
                 self.view.show_error("Erro: dados vazios")
                 return

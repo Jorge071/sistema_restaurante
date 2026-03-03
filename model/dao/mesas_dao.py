@@ -5,11 +5,10 @@ class Mesas_DAO(BaseDAO):
     def save(self, mesas:Mesas):
         sql = "insert into mesas (id, numero, capacidade, status) values (%s, %s, %s, %s)"
         
-        values = (
-    mesas._id,
-    mesas._numero,
-    mesas._capacidade,
-    mesas._status
+        values = (  mesas._id,
+                    mesas._numero,
+                    mesas._capacidade,
+                    mesas._status
     )
 
         conn = self._get_connection()
@@ -41,7 +40,7 @@ class Mesas_DAO(BaseDAO):
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
         
-        mesas = None # Variável local
+        mesas = None 
         if row:
            id, numero, capacidade, status = row
            mesas = Mesas(id, numero, capacidade, status)

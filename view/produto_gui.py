@@ -14,7 +14,6 @@ class Produto_View:
         self.root.title("Gestão de Produtos")
         self.root.geometry("800x600")
 
-        # Variáveis
         self.var_id = tk.StringVar(self.root)
         self.var_nome = tk.StringVar(self.root)
         self.var_categoria_str = tk.StringVar(self.root)
@@ -30,7 +29,6 @@ class Produto_View:
             font=("Arial", 16, "bold")
         ).pack(pady=10)
 
-        # FORM
         frame_form = tk.LabelFrame(self.root, text="Dados do Produto")
         frame_form.pack(fill="x", padx=20, pady=10)
 
@@ -133,11 +131,6 @@ class Produto_View:
             self.show_error("Selecione uma categoria!")
             return None
 
-
- 
-    # ACOES
-
-
     def _acao_adicionar(self):
         if self.controller:
             self.controller.add_produto()
@@ -155,10 +148,6 @@ class Produto_View:
             if self.controller:
                 self.controller.delete_produto()
                 self.limpar_campos()
-
-
-
-    # TABELA
 
 
     def show_produto(self, lista):

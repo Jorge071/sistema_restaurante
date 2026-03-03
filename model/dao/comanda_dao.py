@@ -34,7 +34,7 @@ class Comanda_DAO(BaseDAO):
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
         
-        comanda = None # Variável local
+        comanda = None
         if row:
            id, mesa_id,valor_total = row
            comanda = Comanda(id, mesa_id, valor_total)

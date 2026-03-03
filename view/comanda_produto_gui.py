@@ -14,8 +14,7 @@ class Comanda_produto_View:
         self.root.title("Comanda - Produtos")
         self.root.geometry("800x600")
 
-        # Variáveis
-        self.var_comanda = tk.StringVar(self.root)
+        self.var_mesa = tk.StringVar(self.root)
         self.var_produto = tk.StringVar(self.root)
 
         self._setup_ui()
@@ -25,21 +24,20 @@ class Comanda_produto_View:
 
         tk.Label(
             self.root,
-            text="VINCULAR PRODUTOS À COMANDA",
+            text="VINCULAR PRODUTOS À MESA",
             font=("Arial", 16, "bold")
         ).pack(pady=10)
 
-        # FORMULÁRIO
         frame_form = tk.LabelFrame(self.root, text="Dados")
         frame_form.pack(fill="x", padx=20, pady=10)
 
-        tk.Label(frame_form, text="Comanda:").grid(row=0, column=0)
-        self.combo_comanda = ttk.Combobox(
+        tk.Label(frame_form, text="Mesa:").grid(row=0, column=0)
+        self.combo_mesa = ttk.Combobox(
             frame_form,
-            textvariable=self.var_comanda,
+            textvariable=self.var_mesa,
             state="readonly"
         )
-        self.combo_comanda.grid(row=0, column=1, padx=5, pady=5)
+        self.combo_mesa.grid(row=0, column=1, padx=5, pady=5)
 
         tk.Label(frame_form, text="Produto:").grid(row=1, column=0)
         self.combo_produto = ttk.Combobox(
@@ -49,7 +47,6 @@ class Comanda_produto_View:
         )
         self.combo_produto.grid(row=1, column=1, padx=5, pady=5)
 
-        # BOTÕES
         frame_btn = tk.Frame(self.root)
         frame_btn.pack(pady=10)
 
@@ -77,26 +74,22 @@ class Comanda_produto_View:
             command=self._acao_excluir
         ).pack(side=tk.LEFT, padx=5)
 
-        # TABELA
         frame_table = tk.Frame(self.root)
         frame_table.pack(expand=True, fill="both", padx=20, pady=10)
 
         self.tree = ttk.Treeview(
             frame_table,
-            columns=("comanda", "produto"),
+            columns=("mesa", "produto"),
             show="headings"
         )
 
-        self.tree.heading("comanda", text="Comanda")
+        self.tree.heading("mesa", text="Mesa")
         self.tree.heading("produto", text="Produto")
 
         self.tree.pack(expand=True, fill="both")
 
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
 
-
-  
-    # MÉTODOS DE CONTROLE
    
 
     def run(self):
@@ -109,21 +102,18 @@ class Comanda_produto_View:
 
     def get_dados_comanda_produto(self):
         try:
-            comanda_id = int(self.var_comanda.get().split(" - ")[0])
+            mesa_id = int(self.var_mesa.get().split(" - ")[0])
             produto_id = int(self.var_produto.get().split(" - ")[0])
 
             return {
-                "comanda_id": comanda_id,
+                "mesa_id": mesa_id,
                 "produto_id": produto_id
             }
 
         except:
-            self.show_error("Selecione comanda e produto!")
+            self.show_error("Selecione mesa e produto!")
             return None
 
-
-
-    # ACOES
 
 
     def _acao_adicionar(self):
@@ -150,8 +140,7 @@ class Comanda_produto_View:
             self.controller.list_comanda_produto()
 
 
-   
-    #COMBOBOX
+
   
 
     def preencher_combo_produtos(self, lista_produtos):
@@ -160,25 +149,25 @@ class Comanda_produto_View:
         ]
 
 
-    def preencher_combo_comandas(self, lista_comandas):
-        self.combo_comanda["values"] = [
-            f"{c._id} - Mesa {c._mesa_id}" for c in lista_comandas
+    def preencher_combo_mesas(self, lista_mesas):
+        self.combo_mesa["values"] = [
+            f"{m._id} - Mesa {m._numero}" for m in lista_mesas
         ]
 
 
 
-    # TABELA
+
 
     def show_comanda_produto(self, lista):
         for i in self.tree.get_children():
             self.tree.delete(i)
 
         for item in lista:
-            comanda_val = getattr(item, '_comanda_id', getattr(item, 'comanda_id', ''))
+            mesa_val = getattr(item, '_mesa_id', getattr(item, 'mesa_id', ''))
             produto_val = getattr(item, '_produto_id', getattr(item, 'produto_id', ''))
 
             self.tree.insert("", "end", values=(
-                comanda_val,
+                mesa_val,
                 produto_val
             ))
 
@@ -190,7 +179,7 @@ class Comanda_produto_View:
             v = self.tree.item(item_sel[0])["values"]
 
             if v:
-                self.var_comanda.set(str(v[0]))
+                self.var_mesa.set(str(v[0]))
                 self.var_produto.set(str(v[1]))
 
 

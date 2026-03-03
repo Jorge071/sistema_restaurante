@@ -64,7 +64,6 @@ class Mesas_View:
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
 
     def run(self):
-        # Populate list immediately when opening
         if self.controller:
             self.controller.list_mesas()
         
@@ -135,7 +134,6 @@ class Mesas_View:
             self.var_status.set(str(v[3]))
 
     def show_mesas_details(self, mesas):
-        # populate fields for a single mesas object
         if not mesas:
             return
         self.var_id.set(getattr(mesas, '_id', ''))

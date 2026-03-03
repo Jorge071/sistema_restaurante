@@ -34,7 +34,7 @@ class Categoria_DAO(BaseDAO):
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
         
-        categoria = None # Variável local
+        categoria = None 
         if row:
            id, nome = row
            categoria = Categoria(nome, id)

@@ -21,35 +21,22 @@ class Main_Gui:
     def _setup_menu(self):
 
         barra_menu = tk.Menu(self.root)
-
         menu_cadastros = tk.Menu(barra_menu, tearoff=0)
-
         menu_cadastros.add_command(
             label="Mesas",
             command=self._abrir_mesas
         )
-
-        menu_cadastros.add_command(
-            label="Categoria",
-            command=self._abrir_categoria
-        )
-
-        menu_cadastros.add_command(
-            label="Produtos",
-            command=self._abrir_produtos
-        )
-
+        menu_cadastros.add_command(label="Categoria", command=self._abrir_categoria)
+       
+        menu_cadastros.add_command(label="Produtos",command=self._abrir_produtos)
+        
+        menu_cadastros.add_command(label="Comanda_Produto", command=self._abrir_comanda_produto)
+        
         menu_cadastros.add_separator()
 
-        menu_cadastros.add_command(
-            label="Sair",
-            command=self.root.quit
-        )
+        menu_cadastros.add_command(label="Sair",command=self.root.quit)
 
-        barra_menu.add_cascade(
-            label="Módulos",
-            menu=menu_cadastros
-        )
+        barra_menu.add_cascade(label="Módulos",menu=menu_cadastros )
 
         self.root.config(menu=barra_menu)
 
@@ -67,6 +54,10 @@ class Main_Gui:
     def _abrir_produtos(self):
         if self.controller:
             self.controller.exibir_produtos()
+
+    def _abrir_comanda_produto(self):
+        if self.controller:
+            self.controller.exibir_comanda_produto()
 
     def run(self):
         self.root.mainloop()
