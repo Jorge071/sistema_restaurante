@@ -50,29 +50,18 @@ class Comanda_produto_View:
         frame_btn = tk.Frame(self.root)
         frame_btn.pack(pady=10)
 
-        tk.Button(
-            frame_btn,
-            text="VINCULAR",
-            bg="#d4edda",
-            width=15,
+        tk.Button(frame_btn,text="VINCULAR",bg="#d4edda",width=15,
             command=self._acao_adicionar
         ).pack(side=tk.LEFT, padx=5)
 
-        tk.Button(
-            frame_btn,
-            text="ATUALIZAR",
-            bg="#fff3cd",
-            width=15,
-            command=self._acao_editar
-        ).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_btn,text="ATUALIZAR",bg="#fff3cd",width=15,
+            command=self._acao_editar).pack(side=tk.LEFT, padx=5)
 
-        tk.Button(
-            frame_btn,
-            text="EXCLUIR",
-            bg="#f8d7da",
-            width=15,
-            command=self._acao_excluir
-        ).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_btn,text="EXCLUIR",bg="#f8d7da",width=15,
+            command=self._acao_excluir).pack(side=tk.LEFT, padx=5)
+        
+        tk.Button(frame_btn, text="LIMPAR", 
+                  command=self.limpar_campos, bg="lightskyblue", width=15).pack(side=tk.LEFT, padx=5)
 
         frame_table = tk.Frame(self.root)
         frame_table.pack(expand=True, fill="both", padx=20, pady=10)
