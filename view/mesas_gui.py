@@ -38,6 +38,11 @@ class Mesas_View:
         tk.Label(frame_form, text="Status:").grid(row=1, column=2, sticky="e")
         tk.Entry(frame_form, textvariable=self.var_status, width=15).grid(row=1, column=3, padx=5, pady=5)
 
+        tk.Label(frame_form, text="Status:").grid(row=1, column=2, sticky="e")
+        self.combo_status = ttk.Combobox(frame_form, textvariable=self.var_status, values=("Livre", "Ocupado"), state="readonly", width=13)
+        self.combo_status.grid(row=1, column=3, padx=5, pady=5)
+        self.combo_status.set("Livre") 
+
         frame_botoes = tk.Frame(self.root, pady=10)
         frame_botoes.pack()
 
@@ -121,8 +126,9 @@ class Mesas_View:
                 self.limpar_campos()
 
     def limpar_campos(self):
-        for var in [self.var_id, self.var_numero, self.var_capacidade, self.var_status]:
+        for var in [self.var_id, self.var_numero, self.var_capacidade]:
             var.set("")
+        self.var_status.set("Livre")
 
     def _ao_selecionar_tabela(self, event):
         item_sel = self.tree.selection()
