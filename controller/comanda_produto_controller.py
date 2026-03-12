@@ -15,7 +15,7 @@ class Comanda_Produto_Controller:
             dados = self.view.get_dados_comanda_produto()
 
             nova_relacao = Comanda_Produto(
-                dados['mesa_id'],
+                dados['mesas_id'],
                 dados['produto_id'],
                 0.0 
             )
@@ -31,7 +31,7 @@ class Comanda_Produto_Controller:
             dados = self.view.get_dados_comanda_produto()
 
             if self.dao_com_prod.update(
-                dados['mesa_id'],
+                dados['mesas_id'],
                 dados.get('produto_id_antigo', dados['produto_id']), 
                 dados.get('produto_id_novo', dados['produto_id'])
             ):
@@ -47,7 +47,7 @@ class Comanda_Produto_Controller:
             dados = self.view.get_dados_comanda_produto()
 
             if self.dao_com_prod.delete(
-                dados['mesa_id'],
+                dados['mesas_id'],
                 dados['produto_id']
             ):
                 self.view.show_message("Vínculo excluído com sucesso!")

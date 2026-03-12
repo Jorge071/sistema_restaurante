@@ -7,8 +7,7 @@ class Comanda_produto_View:
         self.root = tk.Toplevel()
         self.root.title("Gestão de Comandas (Mesas x Produtos)")
         self.root.geometry("700x550")
-        
-        # Redireciona a ação do botão "X" de fechar a janela
+
         self.root.protocol("WM_DELETE_WINDOW", self._ocultar_janela)
         
         self.var_m = tk.StringVar()
@@ -18,7 +17,7 @@ class Comanda_produto_View:
     def _setup_ui(self):
         tk.Label(self.root, text="COMANDA PRODUTO", font=("Arial", 14, "bold"), pady=10).pack()
         
-        # Frame do Formulário
+
         frame = tk.LabelFrame(self.root, text=" Novo Vínculo ", padx=10, pady=10)
         frame.pack(fill="x", padx=20)
 
@@ -30,14 +29,14 @@ class Comanda_produto_View:
         self.cb_p = ttk.Combobox(frame, textvariable=self.var_p, width=30, state="readonly")
         self.cb_p.grid(row=0, column=3, padx=5)
 
-        # Frame para botões
+
         frame_btn = tk.Frame(self.root)
         frame_btn.pack(pady=10)
 
         tk.Button(frame_btn, text="SALVAR", bg="#d4edda", width=15, command=self._acao_vincular).pack(side=tk.LEFT, padx=5)
         tk.Button(frame_btn, text="EXCLUIR", bg="#f8d7da", width=15, command=self._acao_excluir).pack(side=tk.LEFT, padx=5)
 
-        # Tabela (Treeview)
+
         self.tree = ttk.Treeview(self.root, columns=("m_id", "p_id", "preco"), show="headings")
         self.tree.heading("m_id", text="ID Mesa")
         self.tree.heading("p_id", text="ID Produto")
@@ -54,13 +53,12 @@ class Comanda_produto_View:
 
 
 
-    # --- Controle de Janela ---
+
     def _ocultar_janela(self):
         """Oculta a janela em vez de destruí-la para permitir reabertura."""
-        self.root.grab_release() # Libera o foco principal
-        self.root.withdraw()     # Esconde a janela da tela
+        self.root.grab_release() 
+        self.root.withdraw()     
 
-    # --- Ações dos Botões ---
     def _acao_vincular(self):
         if self.controller:
             self.controller.add_comanda_produto()
@@ -76,7 +74,7 @@ class Comanda_produto_View:
     def get_dados_comanda_produto(self):
         try:
             return {
-                "mesa_id": int(self.var_m.get().split(" - ")[0]), 
+                "mesas_id": int(self.var_m.get().split(" - ")[0]), 
                 "produto_id": int(self.var_p.get().split(" - ")[0])
             }
         except Exception:
@@ -95,7 +93,7 @@ class Comanda_produto_View:
             
         for item in lista:
             self.tree.insert("", "end", values=(
-                item._mesa_id,
+                item._mesas_id,
                 item._produto_id,
                 f"R$ {item._preco_unitario:.2f}"
             ))

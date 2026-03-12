@@ -5,7 +5,7 @@ class Comanda_Produto_DAO(BaseDAO):
 
     def save(self, com_prod: Comanda_Produto):
         sql = """
-            INSERT INTO comanda_produto (mesa_id, produto_id)
+            INSERT INTO comanda_produto (mesas_id, produto_id)
             VALUES (%s, %s)
             """
 
@@ -14,7 +14,7 @@ class Comanda_Produto_DAO(BaseDAO):
 
         try:
                 cursor.execute(sql, (
-                    com_prod._mesa_id,
+                    com_prod._mesas_id,
                     com_prod._produto_id
                 ))
                 conn.commit()
@@ -31,7 +31,7 @@ class Comanda_Produto_DAO(BaseDAO):
 
     def get_all(self):
         sql = """
-        SELECT mesa_id, produto_id
+        SELECT mesas_id, produto_id, 
         FROM comanda_produto
         """
 
@@ -41,9 +41,9 @@ class Comanda_Produto_DAO(BaseDAO):
 
         lista = []
 
-        for (mesa_id, produto_id) in cursor:
+        for (mesas_id, produto_id) in cursor:
             lista.append(
-                Comanda_Produto(mesa_id, produto_id, 0.0) 
+                Comanda_Produto(mesas_id, produto_id, 0.0) 
             )
 
         cursor.close()
@@ -52,15 +52,15 @@ class Comanda_Produto_DAO(BaseDAO):
         return lista
 
  
-    def delete(self, mesa_id, produto_id):
+    def delete(self, mesas_id, produto_id):
         sql = """
         DELETE FROM comanda_produto
-        WHERE mesa_id = %s AND produto_id = %s
+        WHERE mesas_id = %s AND produto_id = %s
         """
 
         conn = self._get_connection()
         cursor = conn.cursor()
-        cursor.execute(sql, (mesa_id, produto_id))
+        cursor.execute(sql, (mesas_id, produto_id))
         conn.commit()
 
         affected_rows = cursor.rowcount
@@ -71,11 +71,11 @@ class Comanda_Produto_DAO(BaseDAO):
         return affected_rows > 0
 
 
-    def update(self, mesa_id, produto_id_antigo, produto_id_novo):
+    def update(self, mesas_id, produto_id_antigo, produto_id_novo):
         sql = """
         UPDATE comanda_produto
         SET produto_id = %s
-        WHERE mesa_id = %s AND produto_id = %s
+        WHERE mesas_id = %s AND produto_id = %s
         """
 
         conn = self._get_connection()
@@ -83,7 +83,7 @@ class Comanda_Produto_DAO(BaseDAO):
 
         cursor.execute(sql, (
             produto_id_novo,
-            mesa_id,
+            mesas_id,
             produto_id_antigo
         ))
 
@@ -97,9 +97,9 @@ class Comanda_Produto_DAO(BaseDAO):
     
     def get_by_id(self, id):
         sql = """
-        SELECT mesa_id, produto_id 
+        SELECT mesas_id, produto_id 
         FROM comanda_produto 
-        WHERE mesa_id = %s
+        WHERE mesas_id = %s
         """
         
         conn = self._get_connection()
@@ -107,9 +107,9 @@ class Comanda_Produto_DAO(BaseDAO):
         cursor.execute(sql, (id,))
         
         lista = []
-        for (mesa_id, produto_id) in cursor:
+        for (mesas_id, produto_id) in cursor:
             lista.append(
-                Comanda_Produto(mesa_id, produto_id, 0.0)
+                Comanda_Produto(mesas_id, produto_id, 0.0)
             )
             
         cursor.close()
