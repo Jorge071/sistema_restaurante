@@ -1,6 +1,5 @@
 from model.comanda_produto import Comanda_Produto
 
-
 class Comanda_Produto_Controller:
 
     def __init__(self, dao_com_prod, dao_prod, dao_mesa, view):
@@ -11,49 +10,36 @@ class Comanda_Produto_Controller:
         self.view.controller = self
 
     def add_comanda_produto(self):
+        mesa_id, produtos_selecionados = self.view.get_dados_selecionados()
+        
+        if not mesa_id: return
+        if not produtos_selecionados:
+            self.view.show_error("Selecione pelo menos um produto!")
+            return
+
         try:
-            dados = self.view.get_dados_comanda_produto()
-
-            nova_relacao = Comanda_Produto(
-                dados['mesas_id'],
-                dados['produto_id'],
-                0.0 
-            )
-
-            self.dao_com_prod.save(nova_relacao)
-            self.view.show_message("Vínculo criado com sucesso!")
+            # Salva cada produto que estava com o checkbox marcado
+            for prod in produtos_selecionados:
+                nova_relacao = Comanda_Produto(
+                    mesas_id=mesa_id,
+                    produto_id=prod["id"],
+                    preco_unitario=prod["valor"] # Pega o valor real do produto no momento
+                )
+                self.dao_com_prod.save(nova_relacao)
+                
+            self.view.show_message("Produtos adicionados com sucesso!")
+            self.list_comanda_produto() # Atualiza a tabela e a soma do valor total
 
         except Exception as e:
             self.view.show_error(f"Erro ao adicionar: {str(e)}")
 
-    def update_comanda_produto(self):
+    def delete_comanda_produto(self, mesa_id, produto_id):
         try:
-            dados = self.view.get_dados_comanda_produto()
-
-            if self.dao_com_prod.update(
-                dados['mesas_id'],
-                dados.get('produto_id_antigo', dados['produto_id']), 
-                dados.get('produto_id_novo', dados['produto_id'])
-            ):
-                self.view.show_message("Vínculo atualizado com sucesso!")
+            if self.dao_com_prod.delete(mesa_id, produto_id):
+                self.view.show_message("Produto removido da mesa com sucesso!")
+                self.list_comanda_produto()
             else:
                 self.view.show_error("Vínculo não encontrado!")
-
-        except Exception as e:
-            self.view.show_error(f"Erro ao atualizar: {str(e)}")
-
-    def delete_comanda_produto(self):
-        try:
-            dados = self.view.get_dados_comanda_produto()
-
-            if self.dao_com_prod.delete(
-                dados['mesas_id'],
-                dados['produto_id']
-            ):
-                self.view.show_message("Vínculo excluído com sucesso!")
-            else:
-                self.view.show_error("Vínculo não encontrado!")
-
         except Exception as e:
             self.view.show_error(f"Erro ao excluir: {str(e)}")
 
@@ -61,16 +47,21 @@ class Comanda_Produto_Controller:
         try:
             lista = self.dao_com_prod.get_all()
             self.view.show_comanda_produto(lista)
-
         except Exception as e:
             self.view.show_error(f"Erro ao listar: {str(e)}")
 
- 
     def list_related_dados(self):
         try:
-            self.view.preencher_combo_produtos(self.dao_prod.get_all())
             self.view.preencher_combo_mesas(self.dao_mesa.get_all())
-
-
+            self.view.preencher_checkbox_produtos(self.dao_prod.get_all())
         except Exception as e:
-            self.view.show_error(f"Algum erro ao carregar os dados: {str(e)}")
+            self.view.show_error(f"Algum erro ao carregar dados: {str(e)}")
+
+    def list_by_mesa(self, mesa_id):
+        try:
+            # Em vez de get_all(), usamos o get_by_id() passando a mesa
+            lista = self.dao_com_prod.get_by_id(mesa_id)
+            # A view vai desenhar a tabela e somar O VALOR TOTAL apenas dessa lista!
+            self.view.show_comanda_produto(lista)
+        except Exception as e:
+            self.view.show_error(f"Erro ao buscar conta da mesa: {str(e)}")
