@@ -23,7 +23,7 @@ class Main_Gui2:
         self.aba_mesas = self.tabview.add("Mesas")
         self.aba_categoria = self.tabview.add("Categorias")
         self.aba_produtos = self.tabview.add("Produtos")
-        self.aba_comanda = self.tabview.add("Comanda Produto")
+        self.aba_mp = self.tabview.add("Mesa Produto")
 
         ctk.CTkLabel(
             self.aba_inicio, 
@@ -38,7 +38,7 @@ class Main_Gui2:
         menu_cadastros.add_command(label="Mesas", command=self._abrir_mesas)
         menu_cadastros.add_command(label="Categoria", command=self._abrir_categoria)
         menu_cadastros.add_command(label="Produtos", command=self._abrir_produtos)
-        menu_cadastros.add_command(label="Comanda Produto", command=self._abrir_comanda_produto)
+        menu_cadastros.add_command(label="Mesa Produto", command=self._abrir_mesa_produto)
         
         menu_cadastros.add_separator()
         menu_cadastros.add_command(label="Sair", command=self.root.quit)
@@ -55,8 +55,8 @@ class Main_Gui2:
             self.controller.exibir_categoria(self.aba_categoria)
         elif aba_selecionada == "Produtos":
             self.controller.exibir_produtos(self.aba_produtos)
-        elif aba_selecionada == "Comanda Produto":
-            self.controller.exibir_comanda_produto(self.aba_comanda)
+        elif aba_selecionada == "Mesa Produto":
+            self.controller.exibir_mesa_produto(self.aba_mp)
 
     def _abrir_mesas(self):
         self.tabview.set("Mesas")
@@ -70,8 +70,8 @@ class Main_Gui2:
         self.tabview.set("Produtos")
         self._ao_mudar_aba()
 
-    def _abrir_comanda_produto(self):
-        self.tabview.set("Comanda Produto")
+    def _abrir_mesa_produto(self):
+        self.tabview.set("Mesa Produto")
         self._ao_mudar_aba()
 
     def run(self):

@@ -1,17 +1,17 @@
 from model.dao.mesas_dao import Mesas_DAO
 from model.dao.categoria_dao import Categoria_DAO
 from model.dao.produto_dao import Produto_DAO
-from model.dao.comanda_produto_dao import Comanda_Produto_DAO
+from model.dao.mesa_produto_dao import Mesa_Produto_DAO
 
 from controller.categoria_controller import Categoria_Controller
 from controller.mesas_controller import Mesas_Controller
 from controller.produto_controller import Produto_Controller
-from controller.comanda_produto_controller import Comanda_Produto_Controller
+from controller.mesa_produto_controller import Mesa_Produto_Controller
 
 from view.categoria_gui import Categoria_View
 from view.mesas_gui import Mesas_View
 from view.produto_gui import Produto_View
-from view.comanda_produto_gui import Comanda_produto_View
+from view.mesa_produto_gui import Mesa_produto_View
 
 class Main_Controller:
     def __init__(self, main_view, db_config):
@@ -45,13 +45,13 @@ class Main_Controller:
         view.controller = ctrl
         view.run()
 
-    def exibir_comanda_produto(self, aba_master=None):
-        dao_rel = Comanda_Produto_DAO(self.db_config)
+    def exibir_mesa_produto(self, aba_master=None):
+        dao_rel = Mesa_Produto_DAO(self.db_config)
         dao_prod = Produto_DAO(self.db_config)
         dao_cat = Mesas_DAO(self.db_config)
 
-        view = Comanda_produto_View(master=aba_master)
-        ctrl = Comanda_Produto_Controller(dao_rel, dao_prod, dao_cat, view)
+        view = Mesa_produto_View(master=aba_master)
+        ctrl = Mesa_Produto_Controller(dao_rel, dao_prod, dao_cat, view)
 
         view.controller = ctrl
         ctrl.list_related_dados()

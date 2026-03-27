@@ -30,7 +30,7 @@ class Main_Gui:
        
         menu_cadastros.add_command(label="Produtos",command=self._abrir_produtos)
         
-        menu_cadastros.add_command(label="Comanda_Produto", command=self._abrir_comanda_produto)
+        menu_cadastros.add_command(label="Mesa_Produto", command=self._abrir_mesa_produto)
         
         menu_cadastros.add_separator()
 
@@ -55,9 +55,9 @@ class Main_Gui:
         if self.controller:
             self.controller.exibir_produtos()
 
-    def _abrir_comanda_produto(self):
+    def _abrir_mesa_produto(self):
         if self.controller:
-            self.controller.exibir_comanda_produto()
+            self.controller.exibir_mesa_produto()
 
     def run(self):
         self.root.mainloop()

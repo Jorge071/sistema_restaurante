@@ -1,4 +1,4 @@
-class Comanda_Produto:
+class Mesa_Produto:
     def __init__(self, mesas_id, produto_id, preco_unitario, produto_nome="", categoria_nome=""):
         self._mesas_id = mesas_id 
         self._produto_id = produto_id

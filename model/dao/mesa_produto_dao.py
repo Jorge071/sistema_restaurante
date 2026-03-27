@@ -1,11 +1,11 @@
-from model.comanda_produto import Comanda_Produto
+from model.mesa_produto import Mesa_Produto
 from model.dao.base_dao import BaseDAO
 
-class Comanda_Produto_DAO(BaseDAO):
+class Mesa_Produto_DAO(BaseDAO):
 
-    def save(self, com_prod: Comanda_Produto):
+    def save(self, com_prod: Mesa_Produto):
         sql = """
-            INSERT INTO comanda_produto (mesas_id, produto_id, preco_unitario)
+            INSERT INTO mesa_produto (mesas_id, produto_id, preco_unitario)
             VALUES (%s, %s, %s)
             """
         conn = self._get_connection()
@@ -33,7 +33,7 @@ class Comanda_Produto_DAO(BaseDAO):
             cp.preco_unitario,
             p.nome AS produto_nome,
             c.nome AS categoria_nome
-        FROM comanda_produto cp
+        FROM mesa_produto cp
         JOIN produto p ON cp.produto_id = p.id
         JOIN categoria c ON p.categoria_id = c.id
         """
@@ -45,7 +45,7 @@ class Comanda_Produto_DAO(BaseDAO):
         lista = []
         for (mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome) in cursor:
             lista.append(
-                Comanda_Produto(mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome) 
+                Mesa_Produto(mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome) 
             )
 
         cursor.close()
@@ -53,7 +53,7 @@ class Comanda_Produto_DAO(BaseDAO):
         return lista
 
     def delete(self, mesas_id, produto_id):
-        sql = "DELETE FROM comanda_produto WHERE mesas_id = %s AND produto_id = %s"
+        sql = "DELETE FROM mesa_produto WHERE mesas_id = %s AND produto_id = %s"
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, (mesas_id, produto_id))
@@ -65,7 +65,7 @@ class Comanda_Produto_DAO(BaseDAO):
     
     def update(self, mesas_id, produto_id_antigo, produto_id_novo, preco_unitario_novo):
         sql = """
-        UPDATE comanda_produto
+        UPDATE mesa_produto
         SET produto_id = %s, preco_unitario = %s
         WHERE mesas_id = %s AND produto_id = %s
         """
@@ -101,7 +101,7 @@ class Comanda_Produto_DAO(BaseDAO):
             cp.preco_unitario,
             p.nome AS produto_nome,
             c.nome AS categoria_nome
-        FROM comanda_produto cp
+        FROM mesa_produto cp
         JOIN produto p ON cp.produto_id = p.id
         JOIN categoria c ON p.categoria_id = c.id
         WHERE cp.mesas_id = %s
@@ -114,7 +114,7 @@ class Comanda_Produto_DAO(BaseDAO):
         lista = []
         for (mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome) in cursor:
             lista.append(
-                Comanda_Produto(mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome)
+                Mesa_Produto(mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome)
             )
             
         cursor.close()

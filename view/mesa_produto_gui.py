@@ -2,7 +2,7 @@ import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-class Comanda_produto_View:
+class Mesa_produto_View:
     def __init__(self, master=None):
         self.controller = None
         
@@ -84,7 +84,7 @@ class Comanda_produto_View:
         if hasattr(self.root, "withdraw"): self.root.withdraw()     
 
     def _acao_vincular(self):
-        if self.controller: self.controller.add_comanda_produto()
+        if self.controller: self.controller.add_mesa_produto()
 
     def _acao_excluir(self):
         if self.controller:
@@ -94,7 +94,7 @@ class Comanda_produto_View:
                 return
             valores = self.tree.item(selecionado[0], 'values')
             if messagebox.askyesno("Confirmar", "Deseja excluir este produto da mesa?"):
-                self.controller.delete_comanda_produto(valores[0], valores[1])
+                self.controller.delete_mesa_produto(valores[0], valores[1])
 
     def _acao_buscar_mesa(self):
         if self.controller:
@@ -105,7 +105,7 @@ class Comanda_produto_View:
                 self.show_error("Selecione uma mesa no campo ao lado para ver a conta!")
 
     def _acao_ver_todas(self):
-        if self.controller: self.controller.list_comanda_produto()
+        if self.controller: self.controller.list_mesa_produto()
 
     def get_dados_selecionados(self):
         try:
@@ -134,7 +134,7 @@ class Comanda_produto_View:
             chk.pack(anchor="w", pady=2)
             self.produto_vars[p._id] = {'var': var, 'valor': p._valor}
 
-    def show_comanda_produto(self, lista):
+    def show_mesa_produto(self, lista):
         for i in self.tree.get_children(): self.tree.delete(i)
         valor_total = 0.0
         for item in lista:
@@ -157,7 +157,7 @@ class Comanda_produto_View:
     def run(self):
         if self.controller:
             self.controller.list_related_dados()
-            self.controller.list_comanda_produto()
+            self.controller.list_mesa_produto()
             
         if hasattr(self.root, "focus_force"): 
             self.root.focus_force()
