@@ -26,7 +26,6 @@ class Comanda_Produto_DAO(BaseDAO):
             conn.close()
 
     def get_all(self):
-        # O SQL agora busca o nome do produto, o valor registrado na venda e o nome da categoria
         sql = """
         SELECT 
             cp.mesas_id, 

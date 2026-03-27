@@ -1,58 +1,64 @@
+import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox, ttk
-
 
 class Mesas_View:
     def __init__(self, master=None):
         self.controller = None
+        
         if master:
-            self.root = tk.Toplevel(master)
+            self.root = master
+            for widget in self.root.winfo_children():
+                widget.destroy()
         else:
-            self.root = tk.Tk()
+            self.root = ctk.CTk()
+            self.root.title("Cadastro de Mesas")
+            self.root.geometry("800x500")
 
-        self.root.title("Cadastro de Mesas")
-        self.root.geometry("800x500")
-
-        self.var_id = tk.StringVar(self.root)
-        self.var_numero = tk.StringVar(self.root)
-        self.var_capacidade = tk.StringVar(self.root)
-        self.var_status = tk.StringVar(self.root)
+        self.var_id = ctk.StringVar(value="")
+        self.var_numero = ctk.StringVar(value="")
+        self.var_capacidade = ctk.StringVar(value="")
+        self.var_status = ctk.StringVar(value="Livre")
 
         self._setup_ui()
 
     def _setup_ui(self):
-        tk.Label(self.root, text="CONTROLE DE MESAS", font=("Arial", 14, "bold"), pady=10).pack()
+        ctk.CTkLabel(self.root, text="CONTROLE DE MESAS", font=ctk.CTkFont(size=18, weight="bold")).pack(pady=10)
 
-        frame_form = tk.LabelFrame(self.root, text="Dados da Mesa", padx=10, pady=10)
+        frame_form = ctk.CTkFrame(self.root)
         frame_form.pack(fill="x", padx=20, pady=5)
 
-        tk.Label(frame_form, text="ID:").grid(row=0, column=0, sticky="e")
-        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg="#f0f0f0").grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        ctk.CTkLabel(frame_form, text="ID:").grid(row=0, column=0, sticky="e", padx=(10, 5), pady=10)
+        ctk.CTkEntry(frame_form, textvariable=self.var_id, state="readonly", width=80).grid(row=0, column=1, padx=5, pady=10, sticky="w")
 
-        tk.Label(frame_form, text="Número:").grid(row=0, column=2, sticky="e")
-        tk.Entry(frame_form, textvariable=self.var_numero, width=15).grid(row=0, column=3, padx=5, pady=5)
+        ctk.CTkLabel(frame_form, text="Número:").grid(row=0, column=2, sticky="e", padx=(20, 5), pady=10)
+        ctk.CTkEntry(frame_form, textvariable=self.var_numero, width=150).grid(row=0, column=3, padx=5, pady=10)
 
-        tk.Label(frame_form, text="Capacidade:").grid(row=1, column=0, sticky="e")
-        tk.Entry(frame_form, textvariable=self.var_capacidade, width=10).grid(row=1, column=1, padx=5, pady=5)
+        ctk.CTkLabel(frame_form, text="Capacidade:").grid(row=1, column=0, sticky="e", padx=(10, 5), pady=10)
+        ctk.CTkEntry(frame_form, textvariable=self.var_capacidade, width=80).grid(row=1, column=1, padx=5, pady=10, sticky="w")
 
-        tk.Label(frame_form, text="Status:").grid(row=1, column=2, sticky="e")
-        tk.Entry(frame_form, textvariable=self.var_status, width=15).grid(row=1, column=3, padx=5, pady=5)
-
-        tk.Label(frame_form, text="Status:").grid(row=1, column=2, sticky="e")
-        self.combo_status = ttk.Combobox(frame_form, textvariable=self.var_status, values=("Livre", "Ocupado"), state="readonly", width=13)
-        self.combo_status.grid(row=1, column=3, padx=5, pady=5)
+        ctk.CTkLabel(frame_form, text="Status:").grid(row=1, column=2, sticky="e", padx=(20, 5), pady=10)
+        self.combo_status = ctk.CTkComboBox(frame_form, variable=self.var_status, values=["Livre", "Ocupado"], state="readonly", width=150)
+        self.combo_status.grid(row=1, column=3, padx=5, pady=10)
         self.combo_status.set("Livre") 
 
-        frame_botoes = tk.Frame(self.root, pady=10)
-        frame_botoes.pack()
+        frame_botoes = ctk.CTkFrame(self.root, fg_color="transparent")
+        frame_botoes.pack(pady=10)
 
-        tk.Button(frame_botoes, text="SALVAR NOVO", command=self._acao_adicionar, bg="#d4edda", width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="ATUALIZAR", command=self._acao_editar, bg="#fff3cd", width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="EXCLUIR", command=self._acao_excluir, bg="#f8d7da", width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="LIMPAR", command=self.limpar_campos, bg="lightskyblue", width=15).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(frame_botoes, text="SALVAR NOVO", command=self._acao_adicionar, fg_color="#28a745", hover_color="#218838", width=120).pack(side="left", padx=5)
+        ctk.CTkButton(frame_botoes, text="ATUALIZAR", command=self._acao_editar, fg_color="#ffc107", text_color="black", hover_color="#e0a800", width=120).pack(side="left", padx=5)
+        ctk.CTkButton(frame_botoes, text="EXCLUIR", command=self._acao_excluir, fg_color="#dc3545", hover_color="#c82333", width=120).pack(side="left", padx=5)
+        ctk.CTkButton(frame_botoes, text="LIMPAR", command=self.limpar_campos, fg_color="#17a2b8", hover_color="#138496", width=120).pack(side="left", padx=5)
 
-        frame_tabela = tk.Frame(self.root, padx=20, pady=10)
-        frame_tabela.pack(expand=True, fill="both")
+        frame_tabela = ctk.CTkFrame(self.root)
+        frame_tabela.pack(expand=True, fill="both", padx=20, pady=10)
+
+        style = ttk.Style()
+        style.theme_use("default")
+        style.configure("Treeview", background="#2b2b2b", foreground="white", rowheight=25, fieldbackground="#2b2b2b", borderwidth=0)
+        style.map('Treeview', background=[('selected', '#1f538d')])
+        style.configure("Treeview.Heading", background="#565b5e", foreground="white", relief="flat")
+        style.map("Treeview.Heading", background=[('active', '#343638')])
 
         self.colunas = ("id", "numero", "capacidade", "status")
         self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings")
@@ -72,7 +78,7 @@ class Mesas_View:
         if self.controller:
             self.controller.list_mesas()
         
-        if not isinstance(self.root, tk.Toplevel):
+        if type(self.root) == ctk.CTk:
             self.root.mainloop()
 
     def get_dados_mesas(self, mesas_existente=None):
@@ -88,11 +94,7 @@ class Mesas_View:
             self.show_error('Capacidade inválida')
             return None
 
-        return {
-            "numero": numero,
-            "capacidade": capacidade,
-            "status": self.var_status.get()
-        }
+        return {"numero": numero, "capacidade": capacidade, "status": self.var_status.get()}
 
     def _acao_adicionar(self):
         if self.controller:
@@ -126,8 +128,9 @@ class Mesas_View:
                 self.limpar_campos()
 
     def limpar_campos(self):
-        for var in [self.var_id, self.var_numero, self.var_capacidade]:
-            var.set("")
+        self.var_id.set("")
+        self.var_numero.set("")
+        self.var_capacidade.set("")
         self.var_status.set("Livre")
 
     def _ao_selecionar_tabela(self, event):
@@ -140,15 +143,11 @@ class Mesas_View:
             self.var_status.set(str(v[3]))
 
     def show_mesas_details(self, mesas):
-        if not mesas:
-            return
+        if not mesas: return
         self.var_id.set(getattr(mesas, '_id', ''))
         self.var_numero.set(str(getattr(mesas, '_numero', '')))
         self.var_capacidade.set(str(getattr(mesas, '_capacidade', '')))
         self.var_status.set(getattr(mesas, '_status', ''))
 
-    def show_message(self, txt):
-        messagebox.showinfo("Sucesso", txt)
-
-    def show_error(self, err):
-        messagebox.showerror("Erro", err)
+    def show_message(self, txt): messagebox.showinfo("Sucesso", txt)
+    def show_error(self, err): messagebox.showerror("Erro", err)

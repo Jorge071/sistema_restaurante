@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 import os
-from view.main_gui import Main_Gui
+from view.main_gui2 import Main_Gui2
 from controller.main_controller import Main_Controller
 
 load_dotenv()
@@ -14,7 +14,7 @@ DB_CONFIG = {
 }
 
 def main():
-    view_principal = Main_Gui()
+    view_principal = Main_Gui2()
     controller_geral = Main_Controller(view_principal, DB_CONFIG)
     view_principal.controller = controller_geral
     view_principal.run()

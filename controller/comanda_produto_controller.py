@@ -18,18 +18,16 @@ class Comanda_Produto_Controller:
             return
 
         try:
-            # Salva cada produto que estava com o checkbox marcado
             for prod in produtos_selecionados:
                 nova_relacao = Comanda_Produto(
                     mesas_id=mesa_id,
                     produto_id=prod["id"],
-                    preco_unitario=prod["valor"] # Pega o valor real do produto no momento
+                    preco_unitario=prod["valor"]
                 )
                 self.dao_com_prod.save(nova_relacao)
                 
             self.view.show_message("Produtos adicionados com sucesso!")
-            self.list_comanda_produto() # Atualiza a tabela e a soma do valor total
-
+            self.list_comanda_produto() 
         except Exception as e:
             self.view.show_error(f"Erro ao adicionar: {str(e)}")
 
@@ -59,9 +57,7 @@ class Comanda_Produto_Controller:
 
     def list_by_mesa(self, mesa_id):
         try:
-            # Em vez de get_all(), usamos o get_by_id() passando a mesa
             lista = self.dao_com_prod.get_by_id(mesa_id)
-            # A view vai desenhar a tabela e somar O VALOR TOTAL apenas dessa lista!
             self.view.show_comanda_produto(lista)
         except Exception as e:
             self.view.show_error(f"Erro ao buscar conta da mesa: {str(e)}")

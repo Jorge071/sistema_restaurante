@@ -1,49 +1,61 @@
+import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox, ttk
-
 
 class Categoria_View:
     def __init__(self, master=None):
         self.controller = None
+
         if master:
-            self.root = tk.Toplevel(master)
+            self.root = master
+            for widget in self.root.winfo_children():
+                widget.destroy()
         else:
-            self.root = tk.Tk()
+            if tk._default_root is None:
+                self.root = ctk.CTk()
+            else:
+                self.root = ctk.CTkToplevel()
+                
+            self.root.title("Cadastro de Categoria")
+            self.root.geometry("800x500")
 
-        self.root.title("Cadastro de Categoria")
-        self.root.geometry("800x500")
-
-        self.var_id = tk.StringVar(self.root)
-        self.var_nome = tk.StringVar(self.root)
+        self.var_id = ctk.StringVar(value="")
+        self.var_nome = ctk.StringVar(value="")
 
         self._setup_ui()
 
     def _setup_ui(self):
-        tk.Label(self.root, text="CONTROLE DE CATEGORIA", font=("Arial", 14, "bold"), pady=10).pack()
+        ctk.CTkLabel(self.root, text="CONTROLE DE CATEGORIA", font=ctk.CTkFont(size=18, weight="bold")).pack(pady=10)
 
-        frame_form = tk.LabelFrame(self.root, text="Dados da Categoria", padx=10, pady=10)
+        frame_form = ctk.CTkFrame(self.root)
         frame_form.pack(fill="x", padx=20, pady=5)
 
-        tk.Label(frame_form, text="ID:").grid(row=0, column=0, sticky="e")
-        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg="#f0f0f0").grid(row=0, column=1, padx=5, pady=5, sticky="w")
+        ctk.CTkLabel(frame_form, text="ID:").grid(row=0, column=0, sticky="e", padx=(10, 5), pady=10)
+        ctk.CTkEntry(frame_form, textvariable=self.var_id, state="readonly", width=80).grid(row=0, column=1, padx=5, pady=10, sticky="w")
 
-        tk.Label(frame_form, text="Nome:").grid(row=0, column=2, sticky="e")
-        tk.Entry(frame_form, textvariable=self.var_nome, width=35).grid(row=0, column=3, padx=5, pady=5)
+        ctk.CTkLabel(frame_form, text="Nome:").grid(row=0, column=2, sticky="e", padx=(20, 5), pady=10)
+        ctk.CTkEntry(frame_form, textvariable=self.var_nome, width=300).grid(row=0, column=3, padx=5, pady=10)
 
-        frame_botoes = tk.Frame(self.root, pady=10)
-        frame_botoes.pack()
+        frame_botoes = ctk.CTkFrame(self.root, fg_color="transparent")
+        frame_botoes.pack(pady=10)
 
-        tk.Button(frame_botoes, text="SALVAR NOVO", command=self._acao_adicionar, bg="#d4edda", width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="ATUALIZAR", command=self._acao_editar, bg="#fff3cd", width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="EXCLUIR", command=self._acao_excluir, bg="#f8d7da", width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="LIMPAR", command=self.limpar_campos, bg="lightskyblue", width=15).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(frame_botoes, text="SALVAR NOVO", command=self._acao_adicionar, fg_color="#28a745", hover_color="#218838", width=120).pack(side="left", padx=5)
+        ctk.CTkButton(frame_botoes, text="ATUALIZAR", command=self._acao_editar, fg_color="#ffc107", text_color="black", hover_color="#e0a800", width=120).pack(side="left", padx=5)
+        ctk.CTkButton(frame_botoes, text="EXCLUIR", command=self._acao_excluir, fg_color="#dc3545", hover_color="#c82333", width=120).pack(side="left", padx=5)
+        ctk.CTkButton(frame_botoes, text="LIMPAR", command=self.limpar_campos, fg_color="#17a2b8", hover_color="#138496", width=120).pack(side="left", padx=5)
 
-        frame_tabela = tk.Frame(self.root, padx=20, pady=10)
-        frame_tabela.pack(expand=True, fill="both")
+        frame_tabela = ctk.CTkFrame(self.root)
+        frame_tabela.pack(expand=True, fill="both", padx=20, pady=10)
+
+        style = ttk.Style()
+        style.theme_use("default")
+        style.configure("Treeview", background="#2b2b2b", foreground="white", rowheight=25, fieldbackground="#2b2b2b", borderwidth=0)
+        style.map('Treeview', background=[('selected', '#1f538d')])
+        style.configure("Treeview.Heading", background="#565b5e", foreground="white", relief="flat")
+        style.map("Treeview.Heading", background=[('active', '#343638')])
 
         self.colunas = ("id", "nome")
         self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings")
-
         self.tree.heading("id", text="ID")
         self.tree.heading("nome", text="Nome")
 
@@ -54,10 +66,7 @@ class Categoria_View:
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
 
     def run(self):
-        if self.controller:
-            self.controller.list_categoria()
-        
-        if not isinstance(self.root, tk.Toplevel):
+        if type(self.root) == ctk.CTk: 
             self.root.mainloop()
 
     def get_dados_categoria(self, categoria_existente=None):
@@ -79,8 +88,7 @@ class Categoria_View:
         for i in self.tree.get_children():
             self.tree.delete(i)
         for p in lista:
-            self.tree.insert("", "end", values=(p._id, p._nome))
-
+            self.tree.insert("", "end", values=(getattr(p, '_id', ''), getattr(p, '_nome', '')))
 
     def show_clientes(self, lista):
         self.show_categoria(lista)
@@ -102,8 +110,8 @@ class Categoria_View:
                 self.limpar_campos()
 
     def limpar_campos(self):
-        for var in [self.var_id, self.var_nome]:
-            var.set("")
+        self.var_id.set("")
+        self.var_nome.set("")
 
     def _ao_selecionar_tabela(self, event):
         item_sel = self.tree.selection()
@@ -112,14 +120,17 @@ class Categoria_View:
             self.var_id.set(v[0])
             self.var_nome.set(v[1])
 
-    def show_message(self, txt):
-        messagebox.showinfo("Sucesso", txt)
-
-    def show_error(self, err):
-        messagebox.showerror("Erro", err)
+    def show_message(self, txt): messagebox.showinfo("Sucesso", txt)
+    def show_error(self, err): messagebox.showerror("Erro", err)
 
     def show_categoria_details(self, categoria):
-        if not categoria:
-            return
+        if not categoria: return
         self.var_id.set(getattr(categoria, '_id', ''))
         self.var_nome.set(getattr(categoria, '_nome', ''))
+
+    def run(self):
+        if self.controller:
+            self.controller.list_categoria()
+            
+        if type(self.root) == ctk.CTk: 
+            self.root.mainloop()
