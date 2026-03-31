@@ -15,6 +15,8 @@ class Produto_Controller:
     def add_produto(self):
         try:
             dados = self.view.get_dados_produto()
+            if not dados:
+                return
             novo = Produto(
                 id=None,
                 categoria_id=dados['categoria_id'],
@@ -36,7 +38,8 @@ class Produto_Controller:
                 return
 
             dados = self.view.get_dados_produto(produto_existente)
-
+            if not dados:
+                return
             produto_atualizado = Produto(
                 id=id_produto,
                 categoria_id=dados['categoria_id'],
@@ -51,7 +54,6 @@ class Produto_Controller:
 
         except Exception as e:
             self.view.show_error(f"Erro ao atualizar: {str(e)}")
-
     def delete_produto(self):
         try:
             id_produto = self.view.get_id()

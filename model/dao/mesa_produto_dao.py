@@ -28,6 +28,7 @@ class Mesa_Produto_DAO(BaseDAO):
     def get_all(self):
         sql = """
         SELECT 
+            cp.id,  # <-- Adicionando o ID aqui
             cp.mesas_id, 
             cp.produto_id, 
             cp.preco_unitario,
@@ -37,26 +38,26 @@ class Mesa_Produto_DAO(BaseDAO):
         JOIN produto p ON cp.produto_id = p.id
         JOIN categoria c ON p.categoria_id = c.id
         """
-
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql)
 
         lista = []
-        for (mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome) in cursor:
+        for (id, mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome) in cursor:
             lista.append(
-                Mesa_Produto(mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome) 
+                Mesa_Produto(mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome, id=id) 
             )
 
         cursor.close()
         conn.close()
         return lista
 
-    def delete(self, mesas_id, produto_id):
-        sql = "DELETE FROM mesa_produto WHERE mesas_id = %s AND produto_id = %s"
+
+    def delete(self, id):
+        sql = "DELETE FROM mesa_produto WHERE id = %s"
         conn = self._get_connection()
         cursor = conn.cursor()
-        cursor.execute(sql, (mesas_id, produto_id))
+        cursor.execute(sql, (id,)) 
         conn.commit()
         affected_rows = cursor.rowcount
         cursor.close()
@@ -96,6 +97,7 @@ class Mesa_Produto_DAO(BaseDAO):
     def get_by_id(self, id_mesa):
         sql = """
         SELECT 
+            cp.id, 
             cp.mesas_id, 
             cp.produto_id, 
             cp.preco_unitario,
@@ -112,12 +114,13 @@ class Mesa_Produto_DAO(BaseDAO):
         cursor.execute(sql, (id_mesa,))
         
         lista = []
-        for (mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome) in cursor:
+        for (id, mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome) in cursor:
             lista.append(
-                Mesa_Produto(mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome)
+                Mesa_Produto(mesas_id, produto_id, preco_unitario, produto_nome, categoria_nome, id=id)
             )
             
         cursor.close()
         conn.close()    
         
         return lista
+        

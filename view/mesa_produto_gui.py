@@ -59,13 +59,15 @@ class Mesa_produto_View:
         frame_tabela = ctk.CTkFrame(self.root)
         frame_tabela.pack(expand=True, fill="both", padx=20, pady=5)
 
-        self.tree = ttk.Treeview(frame_tabela, columns=("m_id", "p_id", "produto", "categoria", "preco"), show="headings")
+        self.tree = ttk.Treeview(frame_tabela, columns=("id_vinculo", "m_id", "p_id", "produto", "categoria", "preco"), show="headings")
+        self.tree.heading("id_vinculo", text="ID Único")
         self.tree.heading("m_id", text="ID Mesa")
         self.tree.heading("p_id", text="ID Produto")
         self.tree.heading("produto", text="Produto")
         self.tree.heading("categoria", text="Categoria")
         self.tree.heading("preco", text="Preço")
         
+        self.tree.column("id_vinculo", width=0, stretch=tk.NO) 
         self.tree.column("m_id", width=60, anchor="center")
         self.tree.column("p_id", width=60, anchor="center")
         self.tree.column("produto", width=150, anchor="center")
@@ -94,7 +96,7 @@ class Mesa_produto_View:
                 return
             valores = self.tree.item(selecionado[0], 'values')
             if messagebox.askyesno("Confirmar", "Deseja excluir este produto da mesa?"):
-                self.controller.delete_mesa_produto(valores[0], valores[1])
+                self.controller.delete_mesa_produto(valores[0])
 
     def _acao_buscar_mesa(self):
         if self.controller:
@@ -139,6 +141,7 @@ class Mesa_produto_View:
         valor_total = 0.0
         for item in lista:
             self.tree.insert("", "end", values=(
+                item._id, 
                 item._mesas_id, item._produto_id, item._produto_nome,
                 item._categoria_nome, f"R$ {item._preco_unitario:.2f}"
             ))
@@ -149,10 +152,6 @@ class Mesa_produto_View:
 
     def show_message(self, m): messagebox.showinfo("Sucesso", m)
     def show_error(self, e): messagebox.showerror("Erro", e)
-    
-    def run(self):
-        if hasattr(self.root, "focus_force"): self.root.focus_force()
-        if type(self.root) == ctk.CTk: self.root.mainloop()
 
     def run(self):
         if self.controller:

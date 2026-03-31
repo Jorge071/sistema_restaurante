@@ -86,3 +86,18 @@ class Mesas_DAO(BaseDAO):
         finally:
             cursor.close()
             conn.close()
+
+    def get_by_numero(self, numero):
+        sql = "select id, numero, capacidade, status from mesas where numero = %s"
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        try:
+            cursor.execute(sql, (numero,))
+            row = cursor.fetchone()
+            if row:
+                id, numero, capacidade, status = row
+                return Mesas(id, numero, capacidade, status)
+            return None
+        finally:
+            cursor.close()
+            conn.close()

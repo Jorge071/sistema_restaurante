@@ -11,6 +11,13 @@ class Mesas_Controller:
     def add_mesas(self):
         try:
             dados = self.view.get_dados_mesas()
+            if not dados:
+                return  
+            mesa_existente = self.dao.get_by_numero(dados['numero'])
+            if mesa_existente:
+                self.view.show_error(f"Já existe uma mesa com o número {dados['numero']}!")
+                return
+
             novo = Mesas(
                 id=None,
                 numero=dados['numero'],
@@ -27,9 +34,17 @@ class Mesas_Controller:
             id_mesas = self.view.get_id()
             mesas_existente = self.dao.get_by_id(id_mesas)
             if not mesas_existente:
-                self.view.show_error("Mesa não encontrado!")
+                self.view.show_error("Mesa não encontrada!")
                 return
+                
             dados = self.view.get_dados_mesas(mesas_existente)
+            if not dados:
+                return  
+            
+            mesa_com_mesmo_numero = self.dao.get_by_numero(dados['numero'])
+            if mesa_com_mesmo_numero and mesa_com_mesmo_numero._id != id_mesas:
+                self.view.show_error(f"Já existe outra mesa com o número {dados['numero']}!")
+                return            
             mesas_atualizado = Mesas(
                 id=id_mesas,
                 numero=dados['numero'],

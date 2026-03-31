@@ -48,10 +48,10 @@ class Main_Controller:
     def exibir_mesa_produto(self, aba_master=None):
         dao_rel = Mesa_Produto_DAO(self.db_config)
         dao_prod = Produto_DAO(self.db_config)
-        dao_cat = Mesas_DAO(self.db_config)
+        dao_mesa = Mesas_DAO(self.db_config)
 
         view = Mesa_produto_View(master=aba_master)
-        ctrl = Mesa_Produto_Controller(dao_rel, dao_prod, dao_cat, view)
+        ctrl = Mesa_Produto_Controller(dao_rel, dao_prod, dao_mesa, view)
 
         view.controller = ctrl
         ctrl.list_related_dados()

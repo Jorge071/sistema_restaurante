@@ -83,18 +83,28 @@ class Mesas_View:
 
     def get_dados_mesas(self, mesas_existente=None):
         try:
-            numero = int(self.var_numero.get()) if self.var_numero.get() else None
+            val_numero = self.var_numero.get()
+            if not val_numero:
+                self.show_error('O número da mesa é obrigatório')
+                return None
+            numero = int(val_numero)
+            if numero <= 0:
+                self.show_error("O número da mesa deve ser um valor positivo (maior que zero)!")
+                return None
         except ValueError:
-            self.show_error('Número inválido')
+            self.show_error('Número inválido! Digite apenas números inteiros.')
             return None
-
         try:
             capacidade = int(self.var_capacidade.get()) if self.var_capacidade.get() else 0
+            if capacidade < 1:
+                self.show_error("A capacidade da mesa deve ser de pelo menos 1 pessoa!")
+                return None
         except ValueError:
             self.show_error('Capacidade inválida')
             return None
-
         return {"numero": numero, "capacidade": capacidade, "status": self.var_status.get()}
+
+        
 
     def _acao_adicionar(self):
         if self.controller:

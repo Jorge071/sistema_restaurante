@@ -84,10 +84,22 @@ class Produto_View:
     def get_dados_produto(self, obj=None):
         try:
             cat_id = int(self.var_categoria_str.get().split(" - ")[0])
-            return {"nome": self.var_nome.get(), "categoria_id": cat_id, "valor": self.var_valor.get()}
-        except:
+        except Exception:
             self.show_error("Selecione uma categoria!")
             return None
+
+        valor_str = self.var_valor.get().replace(",", ".") 
+        
+        try:
+            valor = float(valor_str)
+            if valor < 0:
+                self.show_error("O valor do produto não pode ser negativo!")
+                return None            
+        except ValueError:
+            self.show_error("Valor inválido! Digite apenas números.")
+            return None
+
+        return {"nome": self.var_nome.get(), "categoria_id": cat_id, "valor": valor}
 
     def _acao_adicionar(self):
         if self.controller:
